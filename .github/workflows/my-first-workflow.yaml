@@ -1,16 +1,17 @@
-name: Open new issue
-on: workflow_dispatch
+name: Test strategy
+on: push
 
 jobs:
-  open-issue:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
+    strategy:
+      matrix:
+        test-group: [1, 2]
+        node: [14, 16]
     steps:
-      - run: |
-          gh issue --repo ${{ github.repository }} \
-            create --title "Issue title" --body "Issue body"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - run: echo "Mock test logs" > test-job-${{ strategy.job-index }}.txt
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build log for job ${{ strategy.job-index }}
+          path: test-job-${{ strategy.job-index }}.txt
