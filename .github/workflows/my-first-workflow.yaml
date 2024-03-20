@@ -1,12 +1,16 @@
-name: Generate random failure
-on: push
+name: Open new issue
+on: workflow_dispatch
+
 jobs:
-  randomly-failing-job:
+  open-issue:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
-      - name: Generate 0 or 1
-        id: generate_number
-        run:  echo "random_number=$(($RANDOM % 2))" >> $GITHUB_OUTPUT
-      - name: Pass or fail
-        run: |
-          if [[ ${{ steps.generate_number.outputs.rando_number == 0 }} ]]; then exit 0; else exit 1; fi
+      - run: |
+          gh issue --repo ${{ github.repository }} \
+            create --title "Issue title" --body "Issue body"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
