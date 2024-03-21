@@ -1,15 +1,9 @@
-name: Build and deploy
+name: Show envs
 on: push
 
 jobs:
-  build:
+  show:
     runs-on: ubuntu-latest
     steps:
-      - name: Build
-        run: exit 1  # Simulamos un error en la construcción
-
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: echo "Deploying"
+      - name: Show
+        run: env
